@@ -46,15 +46,25 @@ static NSString * const SFYPlayerDockIconPreferenceKey = @"YES";
     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(setStatusItemTitle) userInfo:nil repeats:YES];
 }
 
+- (NSString *)doubleToTime:(double)time
+{
+    NSInteger interval = (NSInteger)time;
+    NSInteger seconds = interval % 60;
+    NSInteger minutes = ((interval / 60) % 60);
+    return [NSString stringWithFormat:@"%ld:%02ld", minutes, seconds];
+}
+
 #pragma mark - Setting title text
 
 - (void)setStatusItemTitle
 {
     NSString *trackName = [[self executeAppleScript:@"get name of current track"] stringValue];
     NSString *artistName = [[self executeAppleScript:@"get artist of current track"] stringValue];
-    
+    double playerPosition = [[self executeAppleScript:@"get player position"] doubleValue];
+    NSString *trackTime = [self doubleToTime:playerPosition];
+
     if (trackName && artistName) {
-        NSString *titleText = [NSString stringWithFormat:@"%@ - %@", trackName, artistName];
+        NSString *titleText = [NSString stringWithFormat:@"%@ - %@ [%@]", artistName, trackName, trackTime];
         
         if ([self getPlayerStateVisibility]) {
             NSString *playerState = [self determinePlayerStateText];
