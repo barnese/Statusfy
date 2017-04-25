@@ -64,7 +64,7 @@ static NSString * const SFYPlayerDockIconPreferenceKey = @"YES";
     NSString *trackTime = [self doubleToTime:playerPosition];
 
     if (trackName && artistName) {
-        NSString *titleText = [NSString stringWithFormat:@"%@ - %@ [%@]", artistName, trackName, trackTime];
+        NSString *titleText = [NSString stringWithFormat:@"[%@] %@ - %@", trackTime, artistName, trackName];
         
         if ([self getPlayerStateVisibility]) {
             NSString *playerState = [self determinePlayerStateText];
