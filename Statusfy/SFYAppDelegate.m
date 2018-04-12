@@ -10,7 +10,7 @@
 
 
 static NSString * const SFYPlayerStatePreferenceKey = @"ShowPlayerState";
-static NSString * const SFYPlayerDockIconPreferenceKey = @"YES";
+static NSString * const SFYPlayerDockIconPreferenceKey = @"SFYPlayerDockIconPreferenceKey";
 
 @interface SFYAppDelegate ()
 
@@ -24,9 +24,6 @@ static NSString * const SFYPlayerDockIconPreferenceKey = @"YES";
 
 - (void)applicationDidFinishLaunching:(NSNotification * __unused)aNotification
 {
-    //Initialize the variable the getDockIconVisibility method checks
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SFYPlayerDockIconPreferenceKey];
-    
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     self.statusItem.highlightMode = YES;
     
@@ -44,6 +41,8 @@ static NSString * const SFYPlayerDockIconPreferenceKey = @"YES";
     
     [self setStatusItemTitle];
     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(setStatusItemTitle) userInfo:nil repeats:YES];
+    
+    [self updateUIForDockIconVisibility];
 }
 
 - (NSString *)doubleToTime:(double)time
@@ -148,6 +147,10 @@ static NSString * const SFYPlayerDockIconPreferenceKey = @"YES";
 - (void)toggleDockIconVisibility
 {
     [self setDockIconVisibility:![self getDockIconVisibility]];
+    [self updateUIForDockIconVisibility];
+}
+
+- (void)updateUIForDockIconVisibility {
     self.dockIconMenuItem.title = [self determineDockIconMenuItemTitle];
     
     if(![self getDockIconVisibility])
